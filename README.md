@@ -13,7 +13,7 @@ UDP/TCP 流量做了内核层优化。
 3. 实例页点 **Connect using SSH**，粘这一行：
 
 ```bash
-curl -fsSL https://github.com/<snakelin28>/JoeVPN/archive/refs/heads/main.tar.gz | tar xz && cd JoeVPN-main && sudo bash install.sh
+curl -fsSL https://github.com/snakelin28/JoeVPN/archive/refs/heads/main.tar.gz | tar xz && cd JoeVPN-main && sudo bash install.sh
 ```
 
 4. 终端里出现订阅二维码 → 小飞机扫码。扫不出就复制上面两条 vless:// / hysteria2:// 裸链接。
