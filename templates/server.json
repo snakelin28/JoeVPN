@@ -1,0 +1,58 @@
+{
+  "//": "参考模板。实际渲染由 lib/singbox.sh 的 render_server_config() 完成，",
+  "//2": "因为 Hy2 带宽段(adaptive/fixed)是条件生成的，用纯占位符不好表达。",
+  "//3": "此文件仅供你查看最终结构，改配置请改 config.conf 后重跑 install.sh。",
+
+  "log": { "level": "info", "timestamp": true },
+  "dns": {
+    "servers": [
+      { "type": "tls", "tag": "google",     "server": "8.8.8.8", "detour": "direct" },
+      { "type": "tls", "tag": "cloudflare", "server": "1.1.1.1", "detour": "direct" }
+    ],
+    "strategy": "ipv4_only",
+    "final": "google"
+  },
+  "inbounds": [
+    {
+      "type": "hysteria2",
+      "tag": "hy2-in",
+      "listen": "::",
+      "listen_port": "__HY2_PORT__",
+      "ignore_client_bandwidth": true,
+      "users": [
+        { "name": "joe", "password": "__HY2_PASSWORD__" }
+      ],
+      "tls": {
+        "enabled": true,
+        "server_name": "__HY2_SNI__",
+        "certificate_path": "/etc/sing-box/certs/server.crt",
+        "key_path": "/etc/sing-box/certs/server.key"
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "reality-in",
+      "listen": "::",
+      "listen_port": "__REALITY_PORT__",
+      "users": [
+        { "uuid": "__UUID__", "flow": "xtls-rprx-vision" }
+      ],
+      "tls": {
+        "enabled": true,
+        "server_name": "__REALITY_SNI__",
+        "reality": {
+          "enabled": true,
+          "handshake": {
+            "server": "__REALITY_HANDSHAKE_SERVER__",
+            "server_port": "__REALITY_HANDSHAKE_PORT__"
+          },
+          "private_key": "__REALITY_PRIVATE_KEY__",
+          "short_id": [ "__REALITY_SHORT_ID__" ]
+        }
+      }
+    }
+  ],
+  "outbounds": [
+    { "type": "direct" }
+  ]
+}
